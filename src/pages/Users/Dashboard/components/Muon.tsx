@@ -23,12 +23,12 @@ const Muon: React.FC<MuonProps> = ({ open, onClose, equipmentId }) => {
     setLoading(true);
     try {
       const history = await getMyBorrowingHistory();
-      const borrowingCount = Array.isArray(history)
-        ? history.filter((item) => item.status === "approved" || item.status === "borrowed").length
-        : Array.isArray(history?.data)
-        ? history.data.filter((item: { status: string }) => item.status === "approved" || item.status === "borrowed")
-            .length
-        : 0;
+
+      const data = Array.isArray(history) ? history : Array.isArray(history?.data) ? history.data : [];
+
+      const borrowingCount = data.filter(
+        (item: { status: string }) => item.status === "approved" || item.status === "borrowed"
+      ).length;
 
       if (borrowingCount >= 2) {
         message.warning("Bạn chỉ được mượn tối đa 2 thiết bị, vui lòng trả thiết bị trước khi mượn thêm!");
